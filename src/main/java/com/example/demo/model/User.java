@@ -23,6 +23,7 @@ public class User  implements UserDetails{
     private String email;
     //password does not need to be unique
     @Column(nullable = false)
+    private String password;
 
 
 }
