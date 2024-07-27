@@ -10,62 +10,60 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-// here we are just making the user fields
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @Setter
-public class User  implements UserDetails{
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @Column(unique = true, nullable = false)
     private String username;
-
     @Column(unique = true, nullable = false)
     private String email;
-    //password does not need to be unique
     @Column(nullable = false)
     private String password;
 
-    private  boolean enabled;
-
-    @Column(name='verification_code')
-    private String verification_code;
-
-    @Column(name = 'verification_expiration')
+    @Column(name = "verification_code")
+    private String verificationCode;
+    @Column(name = "verification_expiration")
     private LocalDateTime verificationCodeExpiresAt;
-    //build the constructorsfor all of the fields along with their getter nd setter
+    private boolean enabled;
+
+    //constructor for creating an unverified user
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
-    public User(){}
-//this overriding to meet the requirement to meet the details of the user interface
-    //returning empty list since we are not doing role based authentication
-    //*************WE COULD DO ROLE BASED AUTHENTICATION FOR THIS *******************
+    //default constructor
+    public User(){
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();// returning an empty list means no authorities granted
+        return List.of();
     }
+
+    //TODO: add proper boolean checks
     @Override
-    //we can add more implementaion here so that if user hasnt been active in a while we can expire their account
     public boolean isAccountNonExpired() {
         return true;
     }
+
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
     @Override
     public boolean isEnabled() {
         return enabled;
     }
-
 }
