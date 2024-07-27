@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-
+// here we are just making the user fields
 @Entity
 @Table(name = "user")
 @Getter
@@ -25,5 +25,11 @@ public class User  implements UserDetails{
     @Column(nullable = false)
     private String password;
 
+    //build the constructorsfor all of the fields along with their getter nd setter
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
 }
