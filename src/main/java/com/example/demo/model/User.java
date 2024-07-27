@@ -42,4 +42,9 @@ public class User  implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();// returning an empty list means no authorities granted
     }
+    @Override
+    //we can add more implementaion here so that if user hasnt been active in a while we can expire their account
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 }
