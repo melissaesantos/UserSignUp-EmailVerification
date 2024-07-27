@@ -40,6 +40,6 @@ public class User  implements UserDetails{
     //*************WE COULD DO ROLE BASED AUTHENTICATION FOR THIS *******************
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of();// returning an empty list means no authorities granted
     }
 }
