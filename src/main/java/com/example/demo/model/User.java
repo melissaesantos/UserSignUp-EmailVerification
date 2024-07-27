@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +29,13 @@ public class User  implements UserDetails{
     @Column(nullable = false)
     private String password;
 
+    private  boolean enabled;
+
+    @Column(name='verification_code')
+    private String verification_code;
+
+    @Column(name = 'verification_expiration')
+    private LocalDateTime verificationCodeExpiresAt;
     //build the constructorsfor all of the fields along with their getter nd setter
     public User(String username, String email, String password) {
         this.username = username;
