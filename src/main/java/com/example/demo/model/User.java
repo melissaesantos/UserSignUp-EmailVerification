@@ -3,9 +3,12 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
 // here we are just making the user fields
 @Entity
 @Table(name = "user")
@@ -31,5 +34,12 @@ public class User  implements UserDetails{
         this.email = email;
         this.password = password;
     }
-
+    public User(){}
+//this overriding to meet the requirement to meet the details of the user interface
+    //returning empty list since we are not doing role based authentication
+    //*************WE COULD DO ROLE BASED AUTHENTICATION FOR THIS *******************
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 }
