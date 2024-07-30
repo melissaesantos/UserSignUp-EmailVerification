@@ -28,6 +28,7 @@ public class User implements UserDetails {
     @Column(name = "verification_code")
     private String verificationCode;
     @Column(name = "verification_expiration")
+    //the time the verification code will expire
     private LocalDateTime verificationCodeExpiresAt;
     private boolean enabled;
 
