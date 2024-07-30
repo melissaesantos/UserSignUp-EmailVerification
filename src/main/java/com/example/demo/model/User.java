@@ -47,6 +47,7 @@ public class User implements UserDetails {
     }
 
     //TODO: add proper boolean checks
+    //add the boolean checks when making project for the Bachelor
     @Override
     public boolean isAccountNonExpired() {
         return true;
