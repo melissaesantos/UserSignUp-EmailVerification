@@ -50,8 +50,12 @@ public class JwtService {
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
+                //setting the issue date an assigning the token
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+ expiration))
+                .signWith(getSignInKey(),SignatureAlgorithm.ES256)
+                //cOMPACTING THE jwt function
+                .compact();
     }
 
 }
