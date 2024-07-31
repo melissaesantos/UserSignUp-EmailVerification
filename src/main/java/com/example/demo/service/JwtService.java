@@ -33,16 +33,25 @@ public class JwtService {
     }
     //this is generating a JWT toekn from the users detail object
     public String generateToken(UserDetails userDetails){
-        return generateToken(new Hashmap<>(), userDetails);
+        return generateToken(new HashMap<>(), userDetails);
     }
 
     public String generateToken(Map<String,Object> extraClaims, UserDetails userDetails){
-        return buildToken(extraClaims, userDetails, jwtExpiration)
+        return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
     public long getExpirationTime(){
         return jwtExpiration;
     }
 
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
+        //this is the webtoken
+        return Jwts
+                .builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()+ expiration))
+    }
 
 }
