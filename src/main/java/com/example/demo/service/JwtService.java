@@ -31,6 +31,18 @@ public class JwtService {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+    //this is generating a JWT toekn from the users detail object
+    public String generateToken(UserDetails userDetails){
+        return generateToken(new Hashmap<>(), userDetails);
+    }
+
+    public String generateToken(Map<String,Object> extraClaims, UserDetails userDetails){
+        return buildToken(extraClaims, userDetails, jwtExpiration)
+    }
+
+    public long getExpirationTime(){
+        return jwtExpiration;
+    }
 
 
 }
