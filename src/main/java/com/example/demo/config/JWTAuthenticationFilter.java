@@ -20,15 +20,13 @@ public class JWTAuthenticationFilter {
     private final UserDetailsService userDetailsService;
 
     //now we will define a constructor to inject these dependencies and initialize the instance variables
-
-    public JwtAuthenticationFilter(
-            JwtService jwtService,
-            UserDetailsService userDetailsService,
-            HandlerExceptionResolver handlerExceptionResolver
-    ){
+    public JWTAuthenticationFilter(HandlerExceptionResolver handlerExceptionResolver, JwtService jwtService, UserDetailsService userDetailsService) {
+        this.handlerExceptionResolver = handlerExceptionResolver;
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
-        this.handlerExceptionResolver = handlerExceptionResolver;
     }
+
+
+
 
 }
