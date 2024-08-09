@@ -4,6 +4,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.LoginUserDto;
 import com.example.demo.dto.RegisteredUserDTO;
+import com.example.demo.dto.VerifyUserDto;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -61,6 +63,33 @@ public class AuthenticationService {
                 (new UsernamePasswordAuthenticationToken(input.getEmail(),
                         input.getPassword()));
         return user;
+    }
+
+    public void verifyUser(VerifyUserDto input){
+        //user might not exist so it'll be optional
+        Optional<User> optionalUser = userRepository.findByEmail(input.getEmail());
+
+        if(optionalUser.isPresent()){
+            //this means that we were able to find a user so nowe we can go verify them
+            User user = optionalUser.get();
+            //here we are checking if their verification code already expired
+            if(user.getVerificationCodeExpiresAt().isBefore(LocalDateTime.now())){
+                throw new RuntimeException("Verification Code has Expired");
+            }
+            if(user.getVerificationCode().equals(input.getVerifyCode())){
+                //now we are enabling them if their verif code is valid
+                user.setEnabled(true);
+                user.setVerificationCode(null);
+                user.setVerificationCodeExpiresAt(null);
+                userRepository.save(user);
+            }else{
+                //now if they enter the incorrect verification code
+                throw new RuntimeException("Invalid verification code");
+            }
+
+        }else{
+            throw new RuntimeException("User not found");
+        }
     }
 
 }
