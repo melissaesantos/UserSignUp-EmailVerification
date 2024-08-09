@@ -91,5 +91,26 @@ public class AuthenticationService {
             throw new RuntimeException("User not found");
         }
     }
+    //now lets work on resending the verification code if it expires or if they type it in wrong
+    public void resendVerificationEmail(String email){
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            if(user.isEnabled()){
+                throw new RuntimeException("account is already verified");
+            }
+            user.setVerificationCode(generateVerificcationCode());
+            user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(5));
+            SendVerificationEmail(email);
+            userRepository.save(user);
+
+        }else{
+            //if user is not found in our repository
+            throw new RuntimeException("User not found");
+        }
+
+    }
+
+
 
 }
