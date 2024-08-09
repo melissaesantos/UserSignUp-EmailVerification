@@ -7,6 +7,7 @@ import com.example.demo.dto.RegisteredUserDTO;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,13 @@ public class AuthenticationService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         //so right now we are taking care of the case in which they login but they have not verified their account
         if(!user.isEnabled()){
-            throw new RuntimeException("User is not enabled");
+            throw new RuntimeException("Account not verified. Please verify your email :)");
         }
+        //now we are authenticating the user
+        authenticationManager.authenticate
+                (new UsernamePasswordAuthenticationToken(input.getEmail(),
+                        input.getPassword()));
+        return user;
     }
 
 }
