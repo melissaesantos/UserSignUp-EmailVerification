@@ -7,6 +7,7 @@ import com.example.demo.dto.RegisteredUserDTO;
 import com.example.demo.dto.VerifyUserDto;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -101,7 +102,7 @@ public class AuthenticationService {
             }
             user.setVerificationCode(generateVerificcationCode());
             user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(5));
-            SendVerificationEmail(email);
+            SendVerificationEmail(user);
             userRepository.save(user);
 
         }else{
@@ -109,6 +110,30 @@ public class AuthenticationService {
             throw new RuntimeException("User not found");
         }
 
+    }
+
+    public void SendVerificationEmail(User user){
+        String subject = "Account Verification";
+        String verificationCode = "VERIFICATION CODE" + user.getVerificationCode();
+        String htmlMessage = "<html>"
+                + "<body style=\"font-family: Arial, sans-serif;\">"
+                + "<div style=\"background-color: #f5f5f5; padding: 20px;\">"
+                + "<h2 style=\"color: #333;\">Welcome to our app!</h2>"
+                + "<p style=\"font-size: 16px;\">Please enter the verification code below to continue:</p>"
+                + "<div style=\"background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);\">"
+                + "<h3 style=\"color: #333;\">Verification Code:</h3>"
+                + "<p style=\"font-size: 18px; font-weight: bold; color: #007bff;\">" + verificationCode + "</p>"
+                + "</div>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+
+        try {
+            emailService.sendVerifcationEmail(user.getEmail(), subject, htmlMessage);
+        } catch (MessagingException e) {
+            // Handle email sending exception
+            e.printStackTrace();
+        }
     }
 
 
