@@ -46,7 +46,7 @@ public class AuthenticationService {
         //we are gonna set them to not be enabled because they havent verified their email yet
         user.setEnabled(false);
         //now this is sending that verification email
-        sendVerificationEmail(user);
+        SendVerificationEmail(user);
         //now this is saving the user
         return userRepository.save(user);
 
@@ -101,7 +101,7 @@ public class AuthenticationService {
             if(user.isEnabled()){
                 throw new RuntimeException("account is already verified");
             }
-            user.setVerificationCode(generateVerificcationCode());
+            user.setVerificationCode(generateVerificationCode());
             user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(5));
             SendVerificationEmail(user);
             userRepository.save(user);
