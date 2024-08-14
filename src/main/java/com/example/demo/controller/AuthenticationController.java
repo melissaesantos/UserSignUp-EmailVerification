@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.LoginUserDto;
 import com.example.demo.dto.RegisteredUserDTO;
 import com.example.demo.model.User;
+import com.example.demo.responses.LoginResponse;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.JwtService;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +27,22 @@ public class AuthenticationController {
 
     }
 //people can go ahead and create accounts when they sign up
+    //postmapping post a request for a specific URL
     @PostMapping("/signup")
     public ResponseEntity<User> register(@RequestBody RegisteredUserDTO registeredUserDTO) {
         User registeredUser = authenticationService.signup(registeredUserDTO);
         return ResponseEntity.ok(registeredUser);
     }
+    //now we are handling the postmapping for logging in
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDTO){
+        //we are now grabbing the authenticated user by uding the authenticated service
+        User authenticateUser = authenticationService.authenticate(loginUserDTO);
+        //here we are using our methods to generate a token for the specific user
+        String jwtToken = jwtService.generateToken(authenticateUser);
+        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
+        return ResponseEntity.ok(loginResponse);
+    }
+
+
 }
