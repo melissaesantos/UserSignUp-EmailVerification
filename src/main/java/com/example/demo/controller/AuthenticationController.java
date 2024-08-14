@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LoginUserDto;
 import com.example.demo.dto.RegisteredUserDTO;
+import com.example.demo.dto.VerifyUserDto;
 import com.example.demo.model.User;
 import com.example.demo.responses.LoginResponse;
 import com.example.demo.service.AuthenticationService;
@@ -44,5 +45,15 @@ public class AuthenticationController {
         return ResponseEntity.ok(loginResponse);
     }
 
-
+    @PostMapping("/verify")
+    //this is for when they actually enter the verification code
+    public ResponseEntity<?> verifyUser(@RequestBody VerifyUserDto verifyUserDTO){
+        try{
+            authenticationService.verifyUser(verifyUserDTO);
+            return ResponseEntity.ok("Account Verfied Successfully");
+            //note: we created runtimeException to handle the case when a user isnt verified
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
